@@ -20,23 +20,21 @@
             <div class="col-md-6 border pb-2 shadow-lg rounded-3">  
             <div class="pb-2 pt-2 position-relative">  
                 <h2 class="text-center text-primary">DropZone Image Uploader</h2>  
-                <form enctype="multipart/form-data" class="dropzone rounded-3" id="image-upload">  
-                    <div>  
-                        <h3 class="text-center">Upload Multiple Image By Click On Box</h3>  
+                <form action="display.php" method="post" enctype="multipart/form-data" >  
+                    <div class="dropzone rounded-3" id="image-upload">  
                     </div>  
-                </form>  
-            </div>
-                <form method="post" action="display.php">
                     <input name="images" type="hidden" value="" />
                     <input type="submit" id="submit-final" style="display:none;" />
-                    <input id="submit" class="btn btn-primary fs-5 px-5 w-100" type="submit" value="Submit" />
-                </form>
+                    <input id="submit" class="btn btn-primary fs-5 px-5 w-100 mt-3" type="submit" value="Submit" />
+                </form>  
+            </div>
             </div>  
         </div>  
     </div>  
   
     <script type="text/javascript">  
 
+        let imagesNames = [] ;
         Dropzone.autoDiscover = false;
         var myDropZone = new Dropzone("#image-upload", {
             url:'upload.php',
@@ -45,19 +43,14 @@
             uploadMultiple: true,
             autoProcessQueue : false
         });
-
         document.querySelectorAll("#submit")[0].addEventListener("click" , function(e){
             e.preventDefault();
             myDropZone.processQueue();
         })
-
-        let imagesNames = [] ;
         myDropZone.on("complete", function(file) {
             !imagesNames.includes(file.name)?imagesNames.push(file.name):""
             document.querySelectorAll('[type="hidden"]')[0].value = imagesNames.join(",");
-            if(myDropZone.getUploadingFiles().length === 0 && myDropZone.getQueuedFiles().length === 0){
-                document.querySelectorAll("#submit-final")[0].click();
-            }
+            myDropZone.getUploadingFiles().length==0?document.querySelectorAll("#submit-final")[0].click():"";
         });
     </script>  
   
